@@ -1,0 +1,30 @@
+%run ./get_login
+
+class database_connect:
+  def __init__(self, database, env):
+    login = get_login(database, env)
+    self.database = database
+    self.env = env
+    self.user = login['user']
+    self.password = login['password']
+    self.sql_server = login['sql_server']
+    self.port = login['port']
+ 
+  def query(self, query):
+    result = spark.read\
+               .format("jdbc")\
+               .option('user', self.user)\
+               .option('password', self.password)\
+               .option("query", query)\
+               .option("url", 'jdbc:sqlserver://' + self.sql_server+ ':' + self.port + ';database=' + self.database)\
+               .load()
+    return result
+ 
+  def dbwrite(self, df, mode, table):
+    df.coalesce(10).write.option('user', self.user).option('password', self.password).mode(mode).jdbc('jdbc:sqlserver://' + self.sql_server + ':' + self.port + ';database=' + self.database, table)
+ 
+  def exec_proc(self, proc):
+    self.driver = 'ODBC Driver 17 for SQL Server'
+    with pyodbc.connect('DRIVER='+self.driver+';SERVER='+self.sql_server+';PORT=<PORT>;DATABASE='+self.database+';UID='+self.user+';PWD='+ self.password) as conn:
+        with conn.cursor() as cursor:
+            cursor.execute("exec " + proc)  
