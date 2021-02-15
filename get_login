@@ -1,0 +1,20 @@
+def get_login(database, env):
+    credentials = {}
+    if database == 'xxxxx_DEV' and env == 'dev':
+      credentials['user'] = dbutils.secrets.get(scope = <scope>, key = <key>)  
+      credentials['password'] = dbutils.secrets.get(scope = <scope>, key = <key>)  
+      credentials['sql_server'] = dbutils.secrets.get(scope = <scope>, key = <key>)
+      credentials['port'] = <port>
+      return credentials
+    if database == 'xxxxxx_DEV' and env == 'dev':
+      credentials['user']  = dbutils.secrets.get(scope = <scope>, key = <key>)  
+      credentials['password'] = dbutils.secrets.get(scope = <scope>, key = <key>)
+      credentials['sql_server'] = dbutils.secrets.get(scope = <scope>, key = <key>)
+      credentials['port']  = <port>
+      return credentials
+    if database == 'xxxxx_PROD' and env == 'prod':
+      credentials['user']  = dbutils.secrets.get(scope = <scope>, key = <key>)  
+      credentials['password']  = dbutils.secrets.get(scope = <scope>, key = <key>)
+      credentials['sql_server'] = dbutils.secrets.get(scope = <scope>, key = <key>)
+      credentials['port'] = <port>
+      return credentials
